@@ -2,7 +2,9 @@
 {
     internal class Program
     {
-        static string filePath = "..\\..\\..\\log.txt";
+        static string filePath1 = "..\\..\\..\\log.txt";
+        static string filePath2 = "..\\..\\..\\borrow.txt";
+
         static void Main(string[] args)
         {
             int choice = 0;
@@ -16,7 +18,7 @@
                 {
                     if (choice == 1)
                     {
-                        File.Delete(filePath);
+                        File.Delete(filePath1);
                         Create(); //Only does something the first time
                         bool signedIn = WelcomeSignIn(); //Welcome & sign in page
                         if (signedIn)
@@ -41,7 +43,7 @@
 
         static void Create()
         {
-            if (!File.Exists(filePath))
+            if (!File.Exists(filePath1))
             {
                 //File.Create(filePath);
                 //Console.Write("Vänta, vi bygger ett bibliotek");
@@ -52,7 +54,7 @@
                 //}
                 //Console.WriteLine("\nDone!");
                 string[] books = ["The thorns of Aurelion", "Silverfire and shadowglass", "The ranger of broken pines"];
-                File.WriteAllLines(filePath, books);
+                File.WriteAllLines(filePath1, books);
             }
         }
 
@@ -72,10 +74,10 @@
             bool success = false;
             while (tries != 0 || success == true)
             {
-                Console.Write("Användare:");
+                Console.Write("Användare: ");
                 string userTry = Console.ReadLine();
 
-                Console.Write("Lösenord:");
+                Console.Write("Lösenord: ");
                 string pasTry = Console.ReadLine();
 
 
@@ -129,22 +131,28 @@
                         case 1:
                             Console.WriteLine("Case1");
                             LibraryView();
+                            Back();
                             break;
                         case 2:
                             Console.WriteLine("Case2");
-                            //LibraryBorrow();
+                            LibraryBorrow();
+                            Back();
                             break;
                         case 3:
                             Console.WriteLine("Case3");
                             //LibraryReturn();
+                            Back();
                             break;
                         case 4:
                             Console.WriteLine("Case4");
-                            //LibraryBorrowed();
+                            LibraryBorrowed();
+                            Back();
                             break;
                         case 5:
+                            Console.Clear();
                             Console.WriteLine("Ha det så bra!");
                             Console.WriteLine("Du loggas nu ut.");
+                            Console.WriteLine("");
                             break;
                         default:
                             Console.WriteLine("Välj en siffra mellan 1-5");
@@ -158,19 +166,27 @@
             }
 
         }
-        static void LibraryView()
+        static string[] LibraryView()
         {
-            string[] stock = File.ReadAllLines(filePath);
+            string[] stock = File.ReadAllLines(filePath1);
+            int i = 0;
             foreach (string book in stock)
             {
-                Console.WriteLine(book);
+                Console.WriteLine($"{i}. {book}");
+                i++;
             }
-            Console.WriteLine("Tryck på valfri knapp för att gå till menyn");
-            Console.ReadKey();
+
+            return stock;
         }
         static void LibraryBorrow()
         {
 
+            LibraryView();
+            Console.WriteLine("Vilken bok vill du låna?");
+            if (int.TryParse(Console.ReadLine(), out int choice))
+            {
+                
+            }
         }
         static void LibraryReturn()
         {
@@ -179,7 +195,18 @@
 
         static void LibraryBorrowed()
         {
-
+            string[] stock = File.ReadAllLines(filePath2);
+            int i = 0;
+            foreach (string book in stock)
+            {
+                Console.WriteLine($"{i}. {book}");
+                i++;
+            }
+        }
+        static void Back()
+        {
+            Console.WriteLine("Tryck på valfri knapp för att gå till menyn");
+            Console.ReadKey();
         }
     }
 }
