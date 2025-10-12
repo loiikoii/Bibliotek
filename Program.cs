@@ -170,13 +170,13 @@
                     if (tries != 0)
                     {
                         Console.WriteLine($"Försök igen. Du har {tries} försök kvar");
-                        
+
                     }
                     else if (tries == 0) //Too many tries
                     {
                         Console.WriteLine("För många försök, hejdå!");
                         return false;
-                        
+
                     }
                 }
             }
