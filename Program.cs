@@ -2,8 +2,12 @@
 {
     internal class Program
     {
-        static string filePath1 = "..\\..\\..\\log.txt";
-        static string filePath2 = "..\\..\\..\\borrow.txt";
+        static string filePathOne = "..\\..\\..\\log.txt";
+        static string filePathTwo = "..\\..\\..\\borrow.txt";
+        static string[] books =
+            ["The thorns of Aurelion", "Silverfire and shadowglass", "The ranger of broken pines", "Beneath the willow's shadow", "Paradox engines", "Orbitfall"];
+        static int[] available; //= [2, 1, 4, 5, 1, 3];
+        static int[] borrowed; //= [0, 0, 0, 0, 0, 0];
 
         static void Main(string[] args)
         {
@@ -18,7 +22,7 @@
                 {
                     if (choice == 1)
                     {
-                        File.Delete(filePath1);
+                        File.Delete(filePathOne);
                         Create(); //Only does something the first time
                         bool signedIn = WelcomeSignIn(); //Welcome & sign in page
                         if (signedIn)
@@ -43,7 +47,7 @@
 
         static void Create()
         {
-            if (!File.Exists(filePath1))
+            if (!File.Exists(filePathOne))
             {
                 //File.Create(filePath);
                 //Console.Write("Vänta, vi bygger ett bibliotek");
@@ -53,8 +57,13 @@
                 //    Console.Write(".");
                 //}
                 //Console.WriteLine("\nDone!");
-                string[] books = ["The thorns of Aurelion", "Silverfire and shadowglass", "The ranger of broken pines"];
-                File.WriteAllLines(filePath1, books);
+                //string[] books = ["The thorns of Aurelion", "Silverfire and shadowglass", "The ranger of broken pines"];
+                File.Create(filePathTwo);
+                available = [2, 1, 4, 5, 1, 3];
+                borrowed = [0, 0, 0, 0, 0, 0];
+
+                File.WriteAllLines(filePathOne, books);
+                //File.WriteAllLines(filePath2, borrowed);
             }
         }
 
@@ -140,7 +149,7 @@
                             break;
                         case 3:
                             Console.WriteLine("Case3");
-                            //LibraryReturn();
+                            LibraryReturn();
                             Back();
                             break;
                         case 4:
@@ -166,47 +175,83 @@
             }
 
         }
-        static string[] LibraryView()
+        static void LibraryView()
         {
-            string[] stock = File.ReadAllLines(filePath1);
+            string[] stock = File.ReadAllLines(filePathOne);
             int i = 0;
             foreach (string book in stock)
             {
-                Console.WriteLine($"{i}. {book}");
+                Console.WriteLine($"{i}. {book}, {available[i]} tillgängliga.");
                 i++;
             }
 
-            return stock;
+
         }
         static void LibraryBorrow()
         {
 
             LibraryView();
             Console.WriteLine("Vilken bok vill du låna?");
-            if (int.TryParse(Console.ReadLine(), out int choice))
+            if (int.TryParse(Console.ReadLine(), out int choice) 
+                && choice != 0 && choice !< 5 && available[choice] != 0)
             {
-                
+
+                available[choice]--;
+                borrowed[choice]++;
+            }
+            else if (available[choice] == 0)
+            {
+                Console.WriteLine("Tyvärr har vi inte den här boken inne just nu.");
+            }
+            else
+            {
+                Console.WriteLine("Fel input");
             }
         }
         static void LibraryReturn()
         {
+            LibraryView();
+            Console.WriteLine("Vilken bok vill du lämna tillbaka?");
+            if (int.TryParse(Console.ReadLine(), out int choice)
+               && choice != 0 && choice! < 5 && borrowed[choice] != 0)
+            {
 
+                available[choice]++;
+                borrowed[choice]--;
+            }
+            else if (borrowed[choice] == 0)
+            {
+                Console.WriteLine("Du har inte lånat den här boken.");
+            }
+            else
+            {
+                Console.WriteLine("Fel input");
+            }
         }
 
         static void LibraryBorrowed()
         {
-            string[] stock = File.ReadAllLines(filePath2);
+            string[] stock = books;
             int i = 0;
             foreach (string book in stock)
             {
-                Console.WriteLine($"{i}. {book}");
+                Console.WriteLine($"{i}. {book} {borrowed[i]} lånade");
                 i++;
             }
         }
         static void Back()
         {
+            foreach (int i in available)
+            {
+            }
+
+
+
+
+            //File.WriteAllLines(filePathTwo, borrowed);
             Console.WriteLine("Tryck på valfri knapp för att gå till menyn");
             Console.ReadKey();
+
         }
     }
 }
