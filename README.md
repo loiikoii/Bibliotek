@@ -1,5 +1,5 @@
 All users:   
-user pass  
+user. pin.  
 u1 - 1  
 u2 - 2  
 u3 - 3  
