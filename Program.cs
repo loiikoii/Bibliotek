@@ -30,12 +30,16 @@
                             Console.WriteLine("Log in Success");
                             Choice(); //Coice menu
                         }
+                        else
+                        {
+                            break;
+                        }
                     }
-                    else if (choice == 3) //log restart
-                    {
-                        File.Delete(filePathOne);
-                        File.Delete(filePathTwo);
-                    }
+                    //else if (choice == 3) //log restart
+                    //{
+                    //    File.Delete(filePathOne);
+                    //    File.Delete(filePathTwo);
+                    //}
                     else if (choice == 2)
                     {
                         Console.WriteLine("Hejdå! Hoppas vi ses snart igen!");
@@ -160,16 +164,19 @@
                 }
                 else
                 {
+                    Console.Clear();
                     Console.WriteLine("ogiltigt val");
                     tries--;
                     if (tries != 0)
                     {
                         Console.WriteLine($"Försök igen. Du har {tries} försök kvar");
+                        
                     }
                     else if (tries == 0) //Too many tries
                     {
                         Console.WriteLine("För många försök, hejdå!");
-                        break;
+                        return false;
+                        
                     }
                 }
             }
