@@ -160,7 +160,7 @@
                 }
                 else
                 {
-                    Console.WriteLine("Fel input.");
+                    Console.WriteLine("ogiltigt val");
                     tries--;
                     if (tries != 0)
                     {
@@ -224,7 +224,7 @@
                 }
                 else //wrong input
                 {
-                    Console.WriteLine("Fel input");
+                    Console.WriteLine("ogiltigt val");
                 }
             }
 
@@ -261,7 +261,7 @@
             }
             else
             {
-                Console.WriteLine("Fel input");
+                Console.WriteLine("ogiltigt val");
             }
         }
         static void LibraryReturn()  //Return your books here
@@ -286,24 +286,38 @@
             }
             else
             {
-                Console.WriteLine("Fel input");
+                Console.WriteLine("ogiltigt val");
             }
         }
 
         static void LibraryBorrowed() //Look up borrowed books here.
         {
             string[] stock = File.ReadAllLines(filePathTwo);
+            int total = borrowed.Sum();
             int i = 0;
             foreach (string book in stock)  //Prints borrowed books.
             {
                 Console.WriteLine($"{i}. {books[i]} {borrowed[i]} lånade");
                 i++;
             }
+            if (total == 0)
+            {
+                Console.WriteLine("Du har inga lånade böcker.");
+                Console.WriteLine();
+            }
+            else if (total == 1)
+            {
+                Console.WriteLine($"Du har 1 lånad bok.");
+            }
+            else
+            {
+                Console.WriteLine($"Du har {total} lånade böcker.");
+            }
         }
         static void Back()
         {
             Input(); //Updates files with current values.
-            Console.WriteLine("Tryck på valfri knapp för att gå till menyn");
+            Console.WriteLine("Tryck Enter för att återgå till huvudmenyn");
             Console.ReadKey();
         }
     }
