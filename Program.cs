@@ -32,6 +32,7 @@ namespace Bibliotek
                         bool signedIn = WelcomeSignIn(); //Welcome & sign in page
                         if (signedIn)
                         {
+                            Output();
                             Console.WriteLine("Log in Success");
                             Choice(); //Coice menu
                         }
@@ -73,10 +74,7 @@ namespace Bibliotek
 
                 Input(); //Take values of the global arrays into files.
             }
-            else
-            {
-                Output();
-            }
+            
         }
         static void Input() //translate int - string array, file's input x2
         {
@@ -339,7 +337,7 @@ namespace Bibliotek
             {
                 if (borrowed[i] != 0)
                 {
-                Console.WriteLine($"{i}. {books[i]} {borrowed[i]} lånade");
+                    Console.WriteLine($"{i}. {books[i]} {borrowed[i]} lånade");
                 }
                 i++;
             }
