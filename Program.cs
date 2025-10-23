@@ -1,20 +1,26 @@
-﻿namespace Bibliotek
+namespace Bibliotek
 {
     internal class Program
     {
         static string[] books =
-            ["The thorns of Aurelion", "Silverfire and shadowglass", "The ranger of broken pines", "Beneath the willow's shadow", "Paradox engines", "Orbitfall"]; //Booktitles
-        static int[] available = new int[6]; //Global int array to show availability of each book
-        static int[] borrowed = new int[6]; //Global int array to show the borrowed books
+            ["Filler", "The thorns of Aurelion", "Silverfire and shadowglass", "The ranger of broken pines", "Beneath the willow's shadow", "Paradox engines", "Orbitfall"]; //Booktitles
+        static int[] available = new int[7]; //Global int array to show availability of each book
+        static int[] borrowed = new int[7]; //Global int array to show the borrowed books
         static string filePathOne = "..\\..\\..\\log.txt"; //Path for availability log
-        static string filePathTwo = "..\\..\\..\\borrow.txt"; //Path for borrow log
+        static string filePathU1 = "..\\..\\..\\borrow1.txt"; //Path for borrow log
+        static string filePathU2 = "..\\..\\..\\borrow2.txt"; //Path for borrow log
+        static string filePathU3 = "..\\..\\..\\borrow3.txt"; //Path for borrow log
+        static string filePathU4 = "..\\..\\..\\borrow4.txt"; //Path for borrow log
+        static string filePathU5 = "..\\..\\..\\borrow5.txt"; //Path for borrow log
+        static int user;
+
 
         static void Main(string[] args)
         {
+            user = 0;
             int choice = 0;
             while (choice != 2)
             {
-
                 Console.WriteLine("Välkommen till biblioteket!");
                 Console.WriteLine("1. Logga in");
                 Console.WriteLine("2. Avsluta");
@@ -22,7 +28,6 @@
                 {
                     if (choice == 1)
                     {
-
                         Create(); //Only does something the first time
                         bool signedIn = WelcomeSignIn(); //Welcome & sign in page
                         if (signedIn)
@@ -35,11 +40,15 @@
                             break;
                         }
                     }
-                    //else if (choice == 3) //log restart
-                    //{
-                    //    File.Delete(filePathOne);
-                    //    File.Delete(filePathTwo);
-                    //}
+                    else if (choice == 3) //log restart
+                    {
+                        File.Delete(filePathOne);
+                        File.Delete(filePathU1);
+                        File.Delete(filePathU2);
+                        File.Delete(filePathU3);
+                        File.Delete(filePathU4);
+                        File.Delete(filePathU5);
+                    }
                     else if (choice == 2)
                     {
                         Console.WriteLine("Hejdå! Hoppas vi ses snart igen!");
@@ -59,8 +68,9 @@
         {
             if (!File.Exists(filePathOne)) //Will only run if the files don't exist - Creates start value for availability.
             {
-                available = [2, 1, 4, 5, 1, 3];
-                borrowed = [0, 0, 0, 0, 0, 0];
+                available = [0, 2, 1, 4, 5, 1, 3];
+                borrowed = [0, 0, 0, 0, 0, 0, 0];
+
                 Input(); //Take values of the global arrays into files.
             }
             else
@@ -70,6 +80,7 @@
         }
         static void Input() //translate int - string array, file's input x2
         {
+
             string[] inputOne = new string[available.Length];
             int i = 0;
             // (int[]) available -> (string[]) inputOne - Start
@@ -91,8 +102,17 @@
                 inputTwo[i] = num.ToString();
                 i++;
             }
+            if (!File.Exists(filePathU1))
+            {
+                File.WriteAllLines(filePathU1, inputTwo);
+                File.WriteAllLines(filePathU2, inputTwo);
+                File.WriteAllLines(filePathU3, inputTwo);
+                File.WriteAllLines(filePathU4, inputTwo);
+                File.WriteAllLines(filePathU5, inputTwo);
+            }
             // (int[]) borrowed -> (string[]) inputTwo - End
-            File.WriteAllLines(filePathTwo, inputTwo);//Input to File.
+            File.WriteAllLines(Log(), inputTwo);
+
         }
         static void Output() //translate string - int array, file's output x2
         {
@@ -108,7 +128,7 @@
             }
             // (string[]) borrowed -> (int[]) inputOne - End
             string[] outputTwo = new string[borrowed.Length];
-            outputTwo = File.ReadAllLines(filePathTwo);
+            outputTwo = File.ReadAllLines(Log());
             i = 0;
             // (string[]) available -> (int[]) inputOne - Start
             foreach (string part in outputTwo)
@@ -133,7 +153,21 @@
             string[] u3 = ["u3", "3"];
             string[] u4 = ["u4", "4"];
             string[] u5 = ["u5", "5"];
-            string[][] users = [u1, u2, u3, u4, u5];//users end
+            string[][] users = [u1, u2, u3, u4, u5];
+            //users end
+            //string[,] users2 = new string[5, 2];
+            //users2[0, 0] = "u1";
+            //users2[0, 1] = "1";
+            //users2[1, 0] = "u2";
+            //users2[1, 1] = "2";
+            //users2[2, 0] = "u3";
+            //users2[2, 1] = "3";
+            //users2[3, 0] = "u4";
+            //users2[3, 1] = "4";
+            //users2[4, 0] = "u5";
+            //users2[4, 1] = "5";
+
+
 
 
             Console.WriteLine("Välkommen till biblioteket!");
@@ -154,6 +188,8 @@
                     if (users[i][0] == userTry && users[i][1] == pasTry) //return true if the both indexes match the users above ex "u1" & "1"
                     {
                         success = true;
+                        user = i + 1;
+                        Log();
                         break;
                     }
                 }
@@ -170,13 +206,11 @@
                     if (tries != 0)
                     {
                         Console.WriteLine($"Försök igen. Du har {tries} försök kvar");
-
                     }
                     else if (tries == 0) //Too many tries
                     {
                         Console.WriteLine("För många försök, hejdå!");
-                        return false;
-
+                        break;
                     }
                 }
             }
@@ -199,22 +233,18 @@
                     switch (choice)
                     {
                         case 1:
-                            Console.WriteLine("Case1");
                             LibraryView();
                             Back();
                             break;
                         case 2:
-                            Console.WriteLine("Case2");
                             LibraryBorrow();
                             Back();
                             break;
                         case 3:
-                            Console.WriteLine("Case3");
                             LibraryReturn();
                             Back();
                             break;
                         case 4:
-                            Console.WriteLine("Case4");
                             LibraryBorrowed();
                             Back();
                             break;
@@ -242,7 +272,11 @@
             int i = 0;
             foreach (string book in stock)
             {
-                Console.WriteLine($"{i}. {books[i]}, {available[i]} tillgängliga.");
+                if (available[i] != 0)
+                {
+                    Console.WriteLine($"{i}. {books[i]}, {available[i]} tillgängliga.");
+                }
+
                 i++;
             }
 
@@ -276,7 +310,6 @@
             LibraryBorrowed();
             int[] item = new int[6];
             Console.WriteLine("Vilken bok vill du lämna tillbaka?");
-            Console.WriteLine("Välj 6 om du vill tillbaks till menyn!");
             if (int.TryParse(Console.ReadLine(), out int choice)
                 && choice <= 6 && choice >= 0 && borrowed[choice] != 0)
             {
@@ -299,12 +332,15 @@
 
         static void LibraryBorrowed() //Look up borrowed books here.
         {
-            string[] stock = File.ReadAllLines(filePathTwo);
+            string[] stock = File.ReadAllLines(Log());
             int total = borrowed.Sum();
             int i = 0;
             foreach (string book in stock)  //Prints borrowed books.
             {
+                if (borrowed[i] != 0)
+                {
                 Console.WriteLine($"{i}. {books[i]} {borrowed[i]} lånade");
+                }
                 i++;
             }
             if (total == 0)
@@ -326,6 +362,37 @@
             Input(); //Updates files with current values.
             Console.WriteLine("Tryck Enter för att återgå till huvudmenyn");
             Console.ReadKey();
+
+
         }
+        static string Log()
+        {
+
+            string log;
+            switch (user)
+            {
+                case 1:
+                    log = filePathU1;
+                    return log;
+                case 2:
+                    log = filePathU2;
+                    return log;
+                case 3:
+                    log = filePathU3;
+                    return log;
+                case 4:
+                    log = filePathU4;
+                    return log;
+                case 5:
+                    log = filePathU5;
+                    return log;
+                default:
+                    {
+                        log = "filePathOne";
+                        return log;
+                    }
+            }
+        }
+
     }
 }
